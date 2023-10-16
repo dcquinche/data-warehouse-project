@@ -33,4 +33,4 @@ In this project you can find:
   ```
   python etl.py
   ```
-9. Be sure to delete the cluster to avoid generating more expenses.
+10. Be sure to delete the cluster to avoid generating more expenses.
