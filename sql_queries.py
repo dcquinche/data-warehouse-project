@@ -16,32 +16,24 @@ time_table_drop = "DROP TABLE IF EXISTS time"
 # CREATE TABLES
 staging_events_table_create= ("""
     CREATE TABLE staging_events(
-        event_id INT IDENTITY(0,1),
         artist_name VARCHAR(255),
-        auth VARCHAR(50),
         user_first_name VARCHAR(255),
-        user_gender  VARCHAR(1),
-        item_in_session INTEGER,
+        user_gender VARCHAR(1),
         user_last_name VARCHAR(255),
         song_length DOUBLE PRECISION,
         user_level VARCHAR(50),
         location VARCHAR(255),
-        method VARCHAR(25),
         page VARCHAR(35),
-        registration VARCHAR(50),
         session_id BIGINT,
         song_title VARCHAR(255),
-        status INTEGER,
-        ts VARCHAR(50),
+        ts BIGINT,
         user_agent TEXT,
-        user_id VARCHAR(100),
-        PRIMARY KEY (event_id))
+        user_id VARCHAR(100)
 """)
 
 staging_songs_table_create = ("""
     CREATE TABLE staging_songs(
         song_id VARCHAR(100),
-        num_songs INTEGER,
         artist_id VARCHAR(100),
         artist_latitude DOUBLE PRECISION,
         artist_longitude DOUBLE PRECISION,
@@ -49,8 +41,7 @@ staging_songs_table_create = ("""
         artist_name VARCHAR(255),
         title VARCHAR(255),
         duration DOUBLE PRECISION,
-        year INTEGER,
-        PRIMARY KEY (song_id))
+        year INTEGER
 """)
 
 songplay_table_create = ("""
@@ -128,19 +119,19 @@ staging_songs_copy = ("""
 songplay_table_insert = ("""
     INSERT INTO songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
     SELECT
-        TIMESTAMP 'epoch' + e.ts/1000 * interval '1 second' as start_time,
-        e.user_id,
-        e.user_level,
-        s.song_id,
-        s.artist_id,
-        e.session_id,
-        e.location,
-        e.user_agent
-    FROM staging_events e, staging_songs s
-    WHERE e.page = 'NextSong'
-    AND e.song_title = s.title
-    AND e.artist_name = s.artist_name
-    AND e.song_length = s.duration
+        TIMESTAMP 'epoch' + stg_event.ts/1000 * interval '1 second' as start_time,
+        stg_event.user_id,
+        stg_event.user_level,
+        stg_song.song_id,
+        stg_song.artist_id,
+        stg_event.session_id,
+        stg_event.location,
+        stg_event.user_agent
+    FROM staging_events stg_event, staging_songs stg_song
+    WHERE stg_event.page = 'NextSong'
+    AND stg_event.song_title = stg_song.title
+    AND stg_event.artist_name = stg_song.artist_name
+    AND stg_event.song_length = stg_song.duration
 """)
 
 user_table_insert = ("""
