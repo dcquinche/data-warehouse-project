@@ -43,7 +43,7 @@ In this project you can find:
 - sql_queries.py file: which contains the queries to drop, create, copy and insert the tables.
 
 ### Steps
-1. Create sql queries.
+1. Create sql queries:
 
 - Drop tables.
 - Create tables.
@@ -90,13 +90,13 @@ In this project you can find:
 - Select a default vpc, the security group created on the third step and the cluster subnet group from the step 5 in the network and security section.
 - Once is done, copy and paste the variables needed from the cluster in the dwh.cfg file.
 
-7. Run the following command to drop and create the tables.
+7. Run the following command to drop and create the tables:
 
   ```
   python create_tables.py
   ```
 
-8. Run the following command to implement the ETL pipeline.
+8. Run the following command to implement the ETL pipeline:
 
   ```
   python etl.py
